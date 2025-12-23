@@ -5,10 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bộ Sưu Tập Của Tôi</title>
     <style>
-        /* --- 1. Cấu hình giao diện chung --- */
         body {
             margin: 0; padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: sans-serif;
             background-color: #1a1a1a;
             color: white;
         }
@@ -16,7 +15,6 @@
         header h1 { font-weight: 300; letter-spacing: 2px; margin: 0; text-transform: uppercase; color: #c491ca; }
         header p { color: #ccc; margin-top: 10px; font-style: italic; }
 
-        /* --- 2. Lưới ảnh Masonry --- */
         .gallery-container {
             width: 90%; max-width: 1200px;
             margin: 0 auto 50px auto;
@@ -26,8 +24,7 @@
         .gallery-item {
             margin-bottom: 15px;
             break-inside: avoid;
-            position: relative; 
-            cursor: pointer;
+            cursor: pointer; /* Con trỏ tay chỉ vào để biết bấm được */
             overflow: hidden;
             border-radius: 6px;
         }
@@ -35,63 +32,45 @@
         .gallery-item img {
             width: 100%; height: auto;
             display: block;
-            transition: transform 0.4s ease;
+            transition: transform 0.3s ease;
         }
 
-        /* Lớp phủ đen mờ hiện tiêu đề khi di chuột */
-        .gallery-overlay {
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-            padding: 20px 10px 10px 10px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .gallery-overlay span {
-            font-size: 14px; font-weight: 600; color: #fff;
-        }
-
-        /* Hiệu ứng Hover */
-        .gallery-item:hover img { transform: scale(1.05); }
-        .gallery-item:hover .gallery-overlay { opacity: 1; }
+        .gallery-item:hover img { transform: scale(1.03); filter: brightness(1.1); }
 
         @media (max-width: 900px) { .gallery-container { column-count: 3; } }
         @media (max-width: 600px) { .gallery-container { column-count: 2; } }
 
-        /* --- 3. Lightbox (Xem chi tiết) --- */
         .lightbox {
-            display: none;
+            display: none; /* Mặc định ẩn */
             position: fixed; z-index: 1000;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.95);
+            background-color: rgba(0, 0, 0, 0.95); /* Nền đen tối */
             justify-content: center; align-items: center;
         }
 
         .lightbox-content {
-            max-width: 90%; max-height: 90%;
-            text-align: center;
-            display: flex; flex-direction: column; align-items: center;
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            width: 100%; height: 100%;
         }
 
         .lightbox-content img {
-            max-height: 70vh; max-width: 100%;
+            max-width: 95%; 
+            max-height: 95%; /* Ảnh to tối đa nhưng không tràn màn hình */
             border-radius: 4px;
-            box-shadow: 0 0 20px rgba(255,255,255,0.1);
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            object-fit: contain;
         }
-
-        .lightbox-details {
-            margin-top: 20px; color: #eee; max-width: 600px;
-        }
-
-        .lightbox-details h2 { margin: 0 0 10px 0; font-weight: 400; color: #f0a500; }
-        .lightbox-details p { margin: 0; line-height: 1.6; font-size: 15px; color: #ccc; }
 
         .close-btn {
             position: absolute; top: 20px; right: 30px;
-            color: #fff; font-size: 40px; cursor: pointer;
+            color: #fff; font-size: 45px; cursor: pointer;
+            z-index: 1001; opacity: 0.7;
+            transition: 0.3s;
         }
+        .close-btn:hover { opacity: 1; transform: scale(1.1); }
     </style>
 </head>
 <body>
@@ -102,133 +81,52 @@
     </header>
 
     <div class="gallery-container">
-        <div class="gallery-item" onclick="openLightbox(this)"
-             data-title="Khởi đầu"></div>
-            <img src="img01.png" alt="Ảnh 1">
-            <div class="gallery-overlay"><span>Khởi đầu</span></div>
-        </div>
-
-        <div class="gallery-item" onclick="openLightbox(this)"
-             data-title="Góc phố quen" >
-            <img src="img02.png" alt="Ảnh 2">
-            <div class="gallery-overlay"><span>Góc phố quen</span></div>
-        </div>
-
-        <div class="gallery-item" onclick="openLightbox(this)"
-             data-title="Tương phản">
-            <img src="img03.png" alt="Ảnh 3">
-            <div class="gallery-overlay"><span>Tương phản</span></div>
-        </div>
-
-        <div class="gallery-item" onclick="openLightbox(this)"
-             data-title="Vệt nắng 04">
-            <img src="img04.png" alt="Ảnh 4">
-            <div class="gallery-overlay"><span>Vệt nắng 04</span></div>
-        </div>
-
-        <div class="gallery-item" onclick="openLightbox(this)"
-             data-title="Vệt nắng 05">
-            <img src="img05.png" alt="Ảnh 5">
-            <div class="gallery-overlay"><span>Vệt nắng 05</span></div>
-        </div>
-
-        <div class="gallery-item" onclick="openLightbox(this)"
-             data-title="Vệt nắng 06" >
-            <img src="img06.png" alt="Ảnh 6">
-            <div class="gallery-overlay"><span>Vệt nắng 06</span></div>
-        </div>
-
-        <div class="gallery-item" onclick="openLightbox(this)"
-             data-title="Vệt nắng 07" >
-            <img src="img07.png" alt="Ảnh 7">
-            <div class="gallery-overlay"><span>Vệt nắng 07</span></div>
-        </div>
-
-        <div class="gallery-item" onclick="openLightbox(this)"
-             data-title="Vệt nắng 08" >
-            <img src="img08.png" alt="Ảnh 8">
-            <div class="gallery-overlay"><span>Vệt nắng 08</span></div>
-        </div>
-
-        <div class="gallery-item" onclick="openLightbox(this)"
-             data-title="Vệt nắng 09" >
-            <img src="img09.png" alt="Ảnh 9">
-            <div class="gallery-overlay"><span>Vệt nắng 09</span></div>
-        </div>
-
-        <div class="gallery-item" onclick="openLightbox(this)"
-             data-title="Vệt nắng 10" >
-            <img src="img10.png" alt="Ảnh 10">
-            <div class="gallery-overlay"><span>Vệt nắng 10</span></div>
-        </div>
-
-        <div class="gallery-item" onclick="openLightbox(this)"
-             data-title="Vệt nắng 11" >
-            <img src="img11.png" alt="Ảnh 11">
-            <div class="gallery-overlay"><span>Vệt nắng 11</span></div>
-        </div>
-
-        <div class="gallery-item" onclick="openLightbox(this)"
-             data-title="Vệt nắng 12" >
-            <img src="img12.png" alt="Ảnh 12">
-            <div class="gallery-overlay"><span>Vệt nắng 12</span></div>
-        </div>
-
-        <div class="gallery-item" onclick="openLightbox(this)"
-             data-title="Vệt nắng 13" >
-            <img src="img13.png" alt="Ảnh 13">
-            <div class="gallery-overlay"><span>Vệt nắng 13</span></div>
-        </div>
-
-        <div class="gallery-item" onclick="openLightbox(this)"
-             data-title="Vệt nắng 14" >
-            <img src="img14.png" alt="Ảnh 14">
-            <div class="gallery-overlay"><span>Vệt nắng 14</span></div>
-        </div>
-
-        <div class="gallery-item" onclick="openLightbox(this)"
-             data-title="Vệt nắng 15" >
-            <img src="img15.png" alt="Ảnh 15">
-            <div class="gallery-overlay"><span>Vệt nắng 15</span></div>
-        </div>
-        <div class="gallery-item" onclick="openLightbox(this)"
-             data-title="Kết thúc" >
-            <img src="img16.png" alt="Ảnh 16">
-            <div class="gallery-overlay"><span>Kết thúc</span></div>
-        </div>
+        <div class="gallery-item" onclick="openLightbox(this)"><img src="img01.png" alt="Ảnh 1"></div>
+        <div class="gallery-item" onclick="openLightbox(this)"><img src="img02.png" alt="Ảnh 2"></div>
+        <div class="gallery-item" onclick="openLightbox(this)"><img src="img03.png" alt="Ảnh 3"></div>
+        <div class="gallery-item" onclick="openLightbox(this)"><img src="img04.png" alt="Ảnh 4"></div>
+        <div class="gallery-item" onclick="openLightbox(this)"><img src="img05.png" alt="Ảnh 5"></div>
+        <div class="gallery-item" onclick="openLightbox(this)"><img src="img06.png" alt="Ảnh 6"></div>
+        <div class="gallery-item" onclick="openLightbox(this)"><img src="img07.png" alt="Ảnh 7"></div>
+        <div class="gallery-item" onclick="openLightbox(this)"><img src="img08.png" alt="Ảnh 8"></div>
+        <div class="gallery-item" onclick="openLightbox(this)"><img src="img09.png" alt="Ảnh 9"></div>
+        <div class="gallery-item" onclick="openLightbox(this)"><img src="img10.png" alt="Ảnh 10"></div>
+        <div class="gallery-item" onclick="openLightbox(this)"><img src="img11.png" alt="Ảnh 11"></div>
+        <div class="gallery-item" onclick="openLightbox(this)"><img src="img12.png" alt="Ảnh 12"></div>
+        <div class="gallery-item" onclick="openLightbox(this)"><img src="img13.png" alt="Ảnh 13"></div>
+        <div class="gallery-item" onclick="openLightbox(this)"><img src="img14.png" alt="Ảnh 14"></div>
+        <div class="gallery-item" onclick="openLightbox(this)"><img src="img15.png" alt="Ảnh 15"></div>
+        <div class="gallery-item" onclick="openLightbox(this)"><img src="img16.png" alt="Ảnh 16"></div>
 
     </div>
 
     <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
         <span class="close-btn" onclick="closeLightbox(event)">&times;</span>
-        
-        <div class="lightbox-content" onclick="event.stopPropagation()">
+        <div class="lightbox-content">
             <img id="lightbox-img" src="">
-            <div class="lightbox-details">
-                <h2 id="lightbox-title"></h2>
-                <p id="lightbox-desc"></p>
-            </div>
         </div>
     </div>
 
     <script>
         function openLightbox(element) {
             const imgSrc = element.querySelector('img').src;
-            const title = element.getAttribute('data-title');
-            const desc = element.getAttribute('data-desc');
-
-            document.getElementById('lightbox-img').src = imgSrc;
-            document.getElementById('lightbox-title').innerText = title;
-            document.getElementById('lightbox-desc').innerText = desc;
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
             
-            document.getElementById('lightbox').style.display = 'flex';
+            lightboxImg.src = imgSrc;
+            lightbox.style.display = 'flex';
         }
 
         function closeLightbox(event) {
-            if(event.target.id === 'lightbox' || event.target.classList.contains('close-btn')) {
+            if(event.target.id === 'lightbox' || event.target.classList.contains('close-btn') || event.target.classList.contains('lightbox-content')) {
                 document.getElementById('lightbox').style.display = 'none';
             }
         }
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                document.getElementById('lightbox').style.display = 'none';
+            }
+        });
     </script>
 </body>
 </html>
